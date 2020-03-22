@@ -53,13 +53,55 @@ static int _rl_end;
 #endif
 
 
-void rl_endline(void)
+void rl_end_input(void);
+
+#if CONFIG_SHELL_MULTI_LINE
+    static int _rl_home;
+
+  /**
+   * @brief Judge whether the line should be continued
+   *
+   * @return int 1: continue.
+   *             0: no continue, start a new line.
+   */
+  int rl_should_continue()
+  {
+    // in version 1.0, only judged whether the last character is '\' or not
+    return (_rl_end > _rl_home && _rl_line_buffer[_rl_end-1] == '\\');
+  }
+
+  void rl_new_line()
+  {
+    if (rl_should_continue()) {
+      _rl_line_buffer[--_rl_end] = '\0'; // overwrite the backslash('\')
+      _rl_home = _rl_end;
+
+#if CONFIG_SHELL_LINE_EDITING
+      _rl_cursor = _rl_end;  // update _rl_cursor if LINE_EDITING is enabled.
+#endif /* CONFIG_SHELL_LINE_EDITING */
+
+      shell_puts("\r\n> ");
+    } else {
+      rl_end_input();
+    }
+  }
+#else
+  #define _rl_home 0
+  #define rl_new_line() rl_end_input()
+#endif /* CONFIG_SHELL_MULTI_LINE */
+
+
+void rl_end_input(void)
 {
 #if CONFIG_SHELL_HIST_MIN_RECORD > 0
   if (*_rl_line_buffer) {
     rl_history_add(_rl_line_buffer);
   }
 #endif /*CONFIG_SHELL_HIST_MIN_RECORD */
+
+#if CONFIG_SHELL_MULTI_LINE
+  _rl_home = 0;
+#endif /* CONFIG_SHELL_MULTI_LINE */
 
 #if CONFIG_SHELL_LINE_EDITING
   _rl_cursor = 0;
@@ -102,7 +144,7 @@ void rl_add_char(char ch)
 void rl_rubout(void)
 {
 #if CONFIG_SHELL_LINE_EDITING
-  if (_rl_cursor > 0) {
+  if (_rl_cursor > _rl_home) {
     int len = _rl_end - (--_rl_cursor);
     _rl_end--;
 
@@ -115,7 +157,7 @@ void rl_rubout(void)
       len--;
     } while (len > 0);
 #else
-  if (_rl_end > 0) {
+  if (_rl_end > _rl_home) {
     _rl_end--;
     _rl_line_buffer[_rl_end] = '\0';
     shell_puts(_erase_seq);
@@ -134,19 +176,19 @@ void rl_process_history(const char *history)
     shell_puts(&_rl_line_buffer[_rl_cursor]);  // move cursor to the end on screen.
 #endif
 
-    while (_rl_end > 0) {       // erase all on the screen.
+    while (_rl_end > _rl_home) {       // erase all on the screen.
       shell_puts(_erase_seq);
       _rl_end--;
     }
 
-    _rl_end = strlen(history);  // update _rl_end.
+    _rl_end = strlen(history) + _rl_home;  // update _rl_end.
 
 #if CONFIG_SHELL_LINE_EDITING
     _rl_cursor = _rl_end;       // update _rl_cursor if LINE_EDITING is enabled.
 #endif
 
-    memcpy(_rl_line_buffer, history, _rl_end + 1);
-    shell_puts(_rl_line_buffer);  // display new text and move cursor to the end on screen.
+    memcpy(_rl_line_buffer + _rl_home, history, _rl_end -_rl_home + 1);
+    shell_puts(_rl_line_buffer + _rl_home);  // display new text and move cursor to the end on screen.
   } else {
     U_SHELL_ALERT();
   }
@@ -185,7 +227,7 @@ void rl_delete(void)
 // Move curosr to the beginning of line.
 void rl_line_home(void)
 {
-  while (_rl_cursor) {
+  while (_rl_cursor > _rl_home) {
     shell_putc('\b');
     _rl_cursor--;
   }
@@ -201,7 +243,7 @@ void rl_line_end(void)
 // Move forward (left).
 void rl_forward_cursor(void)
 {
-  if (_rl_cursor > 0) {
+  if (_rl_cursor > _rl_home) {
     shell_putc('\b');
     _rl_cursor--;
   } else {
@@ -223,20 +265,20 @@ void rl_backward_cursor(void)
 // Erase from beginning of line to cursor.
 void rl_erase_all_backward(void)
 {
-  if (_rl_cursor > 0) {
+  if (_rl_cursor > _rl_home) {
     int len = _rl_end - _rl_cursor + 1;
 
     shell_puts(&_rl_line_buffer[_rl_cursor]);  // move cursor to the end on screen.
-    while (_rl_end > 0) {                       // erase all on the screen
+    while (_rl_end > _rl_home) {                       // erase all on the screen
       shell_puts(_erase_seq);
       _rl_end--;
     }
 
-    memmove(_rl_line_buffer, &_rl_line_buffer[_rl_cursor], len--);  // new text.
-    shell_puts(_rl_line_buffer);  // display new text and move cursor to the end on screen.
+    memmove(_rl_line_buffer + _rl_home, &_rl_line_buffer[_rl_cursor], len--);  // new text.
+    shell_puts(_rl_line_buffer + _rl_home);  // display new text and move cursor to the end on screen.
 
-    _rl_cursor = 0;
-    _rl_end = len;
+    _rl_cursor = _rl_home;
+    _rl_end = len + _rl_home;
     while (len > 0) {  // move cursor to the begin on the screen.
       shell_putc('\b');
       len--;
@@ -269,13 +311,13 @@ void rl_dispatch(char ch)
   switch (ch) {
     case '\r':  // CTL_CH('M')
     case '\n':  // CTL_CH('J')
-      rl_endline();
+      rl_new_line();
       break;
 
     case CTL_CH('C'):
       shell_puts("^C\r\n");
       *_rl_line_buffer = '\0';
-      rl_endline();
+      rl_end_input();
       break;
 
     case 255:

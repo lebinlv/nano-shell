@@ -16,14 +16,14 @@
 /* command line input buffer size(byte) */
 #define CONFIG_SHELL_INPUT_BUFFSIZE (127U)
 
-/* set 1 to enable command line edit or not */
+/* set 1 to enable command line edit */
 #define CONFIG_SHELL_LINE_EDITING 1
 
 /* ESC Control Sequence detect, such as Home, Delete, Arrow, etc. */
 #define CONFIG_SHELL_KEY_SEQ_BIND 1
 
 /* set 1 to enable Backslash('\') for line continuation */
-#define CONFIG_SHELL_MULTI_LINE 0
+#define CONFIG_SHELL_MULTI_LINE 1
 
 
 /**
