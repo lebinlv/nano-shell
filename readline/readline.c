@@ -220,8 +220,8 @@ void rl_backward_cursor(void)
   }
 }
 
-// Erase from cursor to end of line.
-void rl_erase_all_forward(void)
+// Erase from beginning of line to cursor.
+void rl_erase_all_backward(void)
 {
   if (_rl_cursor > 0) {
     int len = _rl_end - _rl_cursor + 1;
@@ -244,8 +244,8 @@ void rl_erase_all_forward(void)
   }
 }
 
-// Erase from beginning of line to cursor.
-void rl_erase_all_backward(void)
+// Erase from cursor to end of line.
+void rl_erase_all_forward(void)
 {
   shell_puts(&_rl_line_buffer[_rl_cursor]);  // move cursor to the end on screen.
   while (_rl_end > _rl_cursor) {
@@ -310,10 +310,10 @@ void rl_dispatch(char ch)
 
 
     case CTL_CH('K'):  // Delete all characters on the right side.
-      rl_erase_all_backward();
+      rl_erase_all_forward();
       break;
     case CTL_CH('U'):  // Delete all characters one the left side.
-      rl_erase_all_forward();
+      rl_erase_all_backward();
       break;
 
     case CTL_CH('D'):  // DELETE
