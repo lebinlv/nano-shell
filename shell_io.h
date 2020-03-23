@@ -34,6 +34,7 @@ extern void shell_puts(const char *str);
 
 /**
  * @brief Get next character available from stream.
+ *        not used in interrupt mode.
  *
  * @param ch Return the character in `ch` if there was...
  * @return Result is non-zero if there was a character, or 0 if there wasn't.
