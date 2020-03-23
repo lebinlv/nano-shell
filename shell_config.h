@@ -12,6 +12,7 @@
 #ifndef __NANO_SHELL_CONFIG_H
 #define __NANO_SHELL_CONFIG_H
 
+/******************************* readline configuration ****************************/
 
 /* command line input buffer size(byte) */
 #define CONFIG_SHELL_INPUT_BUFFSIZE (127U)
@@ -35,5 +36,13 @@
  */
 #define CONFIG_SHELL_HIST_MIN_RECORD (5U)
 
+
+/******************************* command configuration ****************************/
+
+#define CONFIG_SHELL_FUNC_BRIEF 1
+
+#define CONFIG_SHELL_CMD_BRIEF  1
+
+#define CONFIG_SHELL_CMD_LONG_HELP 1
 
 #endif /* __NANO_SHELL_CONFIG_H */
