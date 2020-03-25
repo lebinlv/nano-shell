@@ -45,4 +45,10 @@
 
 #define CONFIG_SHELL_CMD_LONG_HELP 1
 
+
+/******************************* shell io configuration ****************************/
+
+/* config the buffer size (shell_printf()) */
+#define CONFIG_SHELL_PRINTF_BUFFER_SIZE 128U
+
 #endif /* __NANO_SHELL_CONFIG_H */
