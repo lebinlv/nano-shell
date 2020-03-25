@@ -87,7 +87,7 @@ typedef struct {
  * @brief add a command to nano-shell
  *
  * @_name: name of the command. Note: THIS IS NOT a string.
- * @_func: function pointer: (*cmd)(const shell_cmd_t *, int, int, const char *const[]).
+ * @_func: function pointer: (*cmd)(const shell_cmd_t *, int, int, char *const[]).
  * @_brief: brief summaries of the command. This is a string.
  * @_help: detailed help information of the command. This is a string.
  */
@@ -105,6 +105,25 @@ typedef struct {
  */
 #define NANO_SHELL_ADD_FUNC(_name, _nparam, _func, _brief) \
   _shell_entry_declare(shell_func_t, _name) = _shell_func_complete(_name, _nparam, _func, _brief)
+
+
+/**
+ * @brief
+ *
+ * @param cmd_name
+ * @return const shell_cmd_t*
+ */
+const shell_cmd_t *shell_find_cmd(const char *cmd_name);
+
+
+/**
+ * @brief
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
+int shell_run_cmd(int argc, char *const argv[]);
 
 
 #endif /* __NANO_SHELL_COMMAND_H */
