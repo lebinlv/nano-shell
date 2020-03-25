@@ -33,7 +33,7 @@ extern void shell_puts(const char *str);
 
 
 /**
- * @brief
+ * @brief printf() for nano-shell
  *
  */
 extern int shell_printf(const char *format, ...) __attribute__((format(printf, 1, 2)));
