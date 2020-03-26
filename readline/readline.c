@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include "readline.h"
-#include "shell_io.h"
+#include "shell_io/shell_io.h"
 #include "history.h"
 #include "key_seq.h"
 

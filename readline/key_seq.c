@@ -13,7 +13,7 @@
 #define __NANO_SHELL_KEY_SEQ_MAP_H
 
 #include "key_seq.h"
-#include "shell_io.h"
+#include "shell_io/shell_io.h"
 
 #include "shell_config.h"
 
