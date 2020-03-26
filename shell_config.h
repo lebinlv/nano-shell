@@ -39,11 +39,14 @@
 
 /******************************* command configuration ****************************/
 
-#define CONFIG_SHELL_FUNC_BRIEF 1
+#define CONFIG_SHELL_FUNC_BRIEF_USAGE 1
 
-#define CONFIG_SHELL_CMD_BRIEF  1
+#define CONFIG_SHELL_CMD_BRIEF_USAGE  1
 
 #define CONFIG_SHELL_CMD_LONG_HELP 1
+
+/* nano-shell provides a built-in help command, set 0 to disable it */
+#define CONFIG_SHELL_CMD_BUILTIN_HELP 1
 
 
 /******************************* shell io configuration ****************************/

@@ -31,8 +31,8 @@ typedef struct _shell_cmd_s {
    */
   int (*cmd)(const struct _shell_cmd_s *pCmdt, int argc, char *const argv[]);
 
-#if CONFIG_SHELL_CMD_BRIEF
-  const char *brief; // brief summaries of the command.
+#if CONFIG_SHELL_CMD_BRIEF_USAGE
+  const char *brief_usage; // brief usage of the command.
 #endif
 
 #if CONFIG_SHELL_CMD_LONG_HELP
@@ -49,29 +49,29 @@ typedef struct {
 
   int (*func)(); // function pointr.
 
-#if CONFIG_SHELL_FUNC_BRIEF
+#if CONFIG_SHELL_FUNC_BRIEF_USAGE
   const char *brief;  // brief summaries of the command.
 #endif
 } shell_func_t;
 
 
-#ifdef CONFIG_SHELL_CMD_BRIEF
+#if CONFIG_SHELL_CMD_BRIEF_USAGE
   #define _CMD_BRIEF(x) x,
 #else
   #define _CMD_BRIEF(x)
-#endif /* CONFIG_SHELL_CMD_BRIEF */
+#endif /* CONFIG_SHELL_CMD_BRIEF_USAGE */
 
-#ifdef CONFIG_SHELL_CMD_LONG_HELP
+#if CONFIG_SHELL_CMD_LONG_HELP
   #define _CMD_HELP(x) x,
 #else
   #define _CMD_HELP(x)
 #endif /* CONFIG_SHELL_CMD_LONG_HELP */
 
-#if CONFIG_SHELL_FUNC_BRIEF
+#if CONFIG_SHELL_FUNC_BRIEF_USAGE
   #define _FUNC_BRIEF(x) x,
 #else
   #define _FUNC_BRIEF(x)
-#endif /* CONFIG_SHELL_FUNC_BRIEF */
+#endif /* CONFIG_SHELL_FUNC_BRIEF_USAGE */
 
 
 
