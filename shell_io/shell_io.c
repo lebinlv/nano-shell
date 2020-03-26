@@ -9,6 +9,7 @@
  *
  */
 
+#include <stdio.h>
 #include <stdarg.h>
 
 #include "shell_io.h"
@@ -42,10 +43,11 @@ extern void low_level_write_char(char ch);
 #error "the value of CONFIG_SHELL_PRINTF_BUFFER_SIZE must be greater than 0!"
 #endif
 
-static char shell_printf_buffer[CONFIG_SHELL_PRINTF_BUFFER_SIZE];
 
-int shell_printf(const char *format, ...)
+__weak int shell_printf(const char *format, ...)
 {
+  static char shell_printf_buffer[CONFIG_SHELL_PRINTF_BUFFER_SIZE];
+
   int length = 0;
 
   va_list ap;
