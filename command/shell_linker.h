@@ -28,9 +28,9 @@
  */
 #define _shell_entry_start(_type)                                   \
   ({                                                                \
-    static const char start[0] __align(4)                           \
+    static char start[0] __align(4)                                 \
       __attribute__((unused, section(".nano_shell_" #_type "_0"))); \
-    (const _type *)&start;                                          \
+    (_type *)&start;                                                \
   })
 
 
@@ -40,9 +40,9 @@
  */
 #define _shell_entry_end(_type)                                     \
   ({                                                                \
-    static const char end[0] __align(4)                             \
+    static char end[0] __align(4)                                   \
       __attribute__((unused, section(".nano_shell_" #_type "_2"))); \
-    (const _type *)&end;                                            \
+    (_type *)&end;                                                  \
   })
 
 
@@ -52,8 +52,8 @@
  */
 #define _shell_entry_count(_type)                   \
   ({                                                \
-    const _type *start = _shell_entry_start(_type); \
-    const _type *end = _shell_entry_end(_type);     \
+    _type *start = _shell_entry_start(_type);       \
+    _type *end = _shell_entry_end(_type);           \
     unsigned int count = end - start;               \
     count;                                          \
   })
