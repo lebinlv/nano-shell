@@ -79,13 +79,14 @@ const shell_cmd_t *shell_find_cmd(const char *cmd_name)
   }
 
   const shell_cmd_t *tmp = _shell_entry_start(shell_cmd_t);
-  const shell_cmd_t *end = _shell_entry_end(shell_cmd_t);
-  unsigned int len = strlen(cmd_name);
+  unsigned int count = _shell_entry_count(shell_cmd_t);
 
-  for (; tmp < end; tmp++) {
-    if (memcmp(cmd_name, tmp->name, len) == 0) {
+  while (count) {
+    if (strcmp(cmd_name, tmp->name) == 0) {
       return tmp;
     }
+    count--;
+    tmp++;
   }
   return NULL;
 }
