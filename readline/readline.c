@@ -28,7 +28,7 @@ static const char _erase_seq[] = "\b \b";
 // console input buffer
 static char _rl_line_buffer[CONFIG_SHELL_INPUT_BUFFSIZE + 1];
 
-// if non-zero, readline return the current line immediately
+// non-zero means readline completed.
 static int _rl_done;
 
 /**
@@ -388,12 +388,13 @@ char *readline(const char *promot)
 {
   char input;
 
-  if (promot) {
-    shell_puts(promot);
-  }
+  shell_puts(promot);
 
+  // clean last line.
   _rl_done = 0;
   *_rl_line_buffer = '\0';
+
+  // start read the new line.
   while (_rl_done == 0) {
     while (!shell_getc(&input)) {
     }
@@ -402,4 +403,17 @@ char *readline(const char *promot)
   }
 
   return _rl_line_buffer;
+}
+
+
+char *readline_react(char ch)
+{
+  if (_rl_done) { // clean last line.
+    _rl_done = 0;
+    *_rl_line_buffer = '\0';
+  }
+
+  rl_dispatch(ch);
+
+  return (_rl_done ? _rl_line_buffer : NULL);
 }

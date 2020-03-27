@@ -13,7 +13,18 @@
 #define __NANO_SHELL_READLINE_H
 
 
+// read a line of input. Prompt with PROMPT. A NULL PROMPT means none.
 char *readline(const char *promot);
+
+
+/**
+ * @brief react to the input character `ch`.
+ *
+ * @param[in] ch: input character.
+ * @return: NULL means the current line has not been completed (need more input).
+ *
+ */
+char *readline_react(char ch);
 
 
 #endif /* __NANO_SHELL_READLINE_H */
