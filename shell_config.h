@@ -54,4 +54,9 @@
 /* config the buffer size (shell_printf()) */
 #define CONFIG_SHELL_PRINTF_BUFFER_SIZE 128U
 
+
+/*******************************  shell configuration  ****************************/
+#define CONFIG_SHELL_PROMPT "STM32H7 >> "
+#define CONFIG_SHELL_MAX_ARGC 10
+
 #endif /* __NANO_SHELL_CONFIG_H */
