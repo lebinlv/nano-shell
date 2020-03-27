@@ -362,9 +362,9 @@ void rl_dispatch(char ch)
       rl_delete();
       break;
 
-    case CTL_CH('X'):
-    case CTL_CH('O'):
-      break;
+    // case CTL_CH('X'):
+    // case CTL_CH('O'):
+    //   break;
 #endif /* CONFIG_SHELL_LINE_EDITING */
 
 
