@@ -49,7 +49,7 @@ static int _rl_end;
 
 #if CONFIG_SHELL_KEY_SEQ_BIND
   /* uesed by @file{key_seq.c} to recognize key sequences */
-  int _rl_key_seq_len;
+  int _rl_key_seq_len = 0;
 #endif
 
 
@@ -328,9 +328,7 @@ void rl_dispatch(char ch)
 
 #if CONFIG_SHELL_KEY_SEQ_BIND
     case '\033':  // ESC(\033)
-      if (_rl_key_seq_len == 0) {
         rl_dispatch_seq(ch);
-      }
       break;
 #endif /* CONFIG_SHELL_KEY_SEQ_BIND */
 
