@@ -113,6 +113,8 @@ void nano_shell_react(char ch)
       }
     }
 
-    shell_puts(CONFIG_SHELL_PROMPT);
+    if (CONFIG_SHELL_PROMPT) {
+      shell_puts(CONFIG_SHELL_PROMPT);
+    }
   }
 }

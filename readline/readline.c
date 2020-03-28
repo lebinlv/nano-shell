@@ -386,7 +386,9 @@ char *readline(const char *promot)
 {
   char input;
 
-  shell_puts(promot);
+  if (promot) {
+    shell_puts(promot);
+  }
 
   // clean last line.
   _rl_done = 0;
