@@ -2,6 +2,18 @@
 
 <img src="doc/pic/nano_shell_welcome.png" width=460>
 
+- [Nano-Shell](#nano-shell)
+  - [Hot Key Bind](#hot-key-bind)
+  - [Add Command](#add-command)
+    - [Simple example:](#simple-example)
+  - [Configuring](#configuring)
+    - [readline configurations:](#readline-configurations)
+    - [command configurations:](#command-configurations)
+    - [shell configurations:](#shell-configurations)
+    - [shell io configurations:](#shell-io-configurations)
+  - [Porting nano-shell to your project](#porting-nano-shell-to-your-project)
+
+
 Nano-Shell is a light but powerful shell designed for embedded systems.
 
 - with or without an operating system;
@@ -13,19 +25,20 @@ Nano-Shell is a light but powerful shell designed for embedded systems.
   |                              | .text<sup>(1)</sup>  | .rodata | .bss<sup>(2)</sup> | .data |
   |:------------------------------------------:|:------:|:-------:|:-----:|:-----:|
   | main loop mode,<br/>all configurations on  | 2.5KB  | 1.03KB  | 852B  | 8B    |
-  | main loop mode,<br/>all configurations off | 616B   | 600B    | 180B  | 0B    |
+  | main loop mode,<br/>all configurations off<sup>(3)</sup> | 616B   | 600B    | 180B  | 0B    |
   | react mode,<br/>all configurations on      | 2.52KB | 1.03KB  | 852B  | 8B    |
-  | react mode,<br/>all configurations off     | 608KB  | 600B    | 180B  | 0B    |
+  | react mode,<br/>all configurations off<sup>(3)</sup>     | 608KB  | 600B    | 180B  | 0B    |
 
   > 1: include build in `help` command.<br/>
-  > 2: include `input buffer`(default 128Bytes) and `hisroty record buffer`(defaut 5*(128+2)Bytes)
+  > 2: include `input buffer`(default 128Bytes) and `hisroty record buffer`(defaut 5*(128+2)Bytes) <br/>
+  > 3: except `CONFIG_SHELL_CMD_BUILTIN_HELP`.
 
 
 ## Hot Key Bind
 
 nano-shell has internally bound these hotkeys:
 
-| HOT KEY | ASCII/ANSI-Escape Code<br/>Xterm, VT100 | Function |
+| HOT KEY | ASCII/ANSI-Escape Code<br/>(Xterm, VT100) | Function |
 |---------|------------------------|----------|
 | Ctrl A | 1 | Home<br/>Move curosr to the start of line.|
 | Ctrl E | 5 | End<br/>Move curosr to the end of line.|
@@ -91,7 +104,7 @@ Run `help` and `help demo` in terminal:
 
 @file: [`shell_config.h`](/shell_config.h)
 
-### readline configurations
+### readline configurations:
 
 - CONFIG_SHELL_INPUT_BUFFSIZE (127U)
   - default value: `(127U)`
@@ -107,14 +120,14 @@ Run `help` and `help demo` in terminal:
 
 - CONFIG_SHELL_MULTI_LINE
   - default: 1(enabled)
-  - use Backslash('\') for line continuation when enabled, set this to `0` will disable line continuation.
+  - use Backslash('\\') for line continuation when enabled, set this to `0` will disable line continuation.
 
 - CONFIG_SHELL_HIST_MIN_RECORD
   - default value: `(5U)`
   - set this to `0` will disable history record.
   - nano-shell will take `CONFIG_SHELL_HIST_MIN_RECORD*(2+CONFIG_SHELL_INPUT_BUFFSIZE)` bytes to record **at least** `CONFIG_SHELL_HIST_MIN_RECORD` histroys. The max history records depends on the average length of the input.
 
-### command configurations
+### command configurations:
 
 - CONFIG_SHELL_CMD_BRIEF_USAGE
   - default: 1(enabled)
@@ -132,14 +145,14 @@ Run `help` and `help demo` in terminal:
   - default: `(10U)`
   - config the max number of arguments, must be no less than 1.
 
-### shell configurations
+### shell configurations:
 
 - CONFIG_SHELL_PROMPT
   - default: `"Nano-Shell >> "`
   - config the shell promot that will displayed at the start of line. If you don't need it, set this to `NULL` or `""`.
 
 
-### shell io configurations
+### shell io configurations:
 
 - CONFIG_SHELL_PRINTF_BUFFER_SIZE 128U
   - default: `(128U)`
@@ -148,9 +161,9 @@ Run `help` and `help demo` in terminal:
 
 ## Porting nano-shell to your project
 
-### 1. add nano-shell root path to your project include path.
+### 1. add nano-shell root path to your project include path. <!-- omit in toc -->
 
-### 2. implement these functions([`@file shell_io.h`](/shell_io/shell_io.h)) in your project:
+### 2. implement these functions([`@file shell_io.h`](/shell_io/shell_io.h)) in your project: <!-- omit in toc -->
 
 this file may help: [`/shell_io/shell_io.c`](/shell_io/shell_io.c).
 ```c
@@ -214,11 +227,11 @@ Note:
   }
   ```
 
-### 3. then modify the configuration file: [`shell_config.h`](/shell_config.h)
+### 3. then modify the configuration file: [`shell_config.h`](/shell_config.h) <!-- omit in toc -->
 
-### 4. according to your system, you can:
+### 4. according to your system, you can: <!-- omit in toc -->
 
-#### 4.1 without os, main loop mode:
+#### 4.1 without os, main loop mode: <!-- omit in toc -->
   ```c
   #include "nano_shell.h"
 
@@ -231,7 +244,7 @@ Note:
   }
   ```
 
-#### 4.2 without os, react mode(non-block):
+#### 4.2 without os, react mode(non-block): <!-- omit in toc -->
   for example:
   ```c
   void your_interrupt_handler (void) // such as uart receive interrupt handler
@@ -248,7 +261,7 @@ Note:
 - `nano_shell_react()` is non-blocked (unless there was an infinite loop in your command function), you can call it when get a new character.
 - ~~It is recommended to disable some configurations in `shell_config.h` if it was called in interrupt.~~
 
-#### 4.3 with os, take freertos for example:
+#### 4.3 with os, take freertos for example: <!-- omit in toc -->
   ```c
   #include "nano_shell.h"
 
@@ -269,7 +282,7 @@ Note:
 Note:
 - When determining the stack size for nano-shell, you should consider the memory occupied by commands added in nano-shell.
 
-### 5. define nano_shell section in your linker script file:
+### 5. define nano_shell section in your linker script file: <!-- omit in toc -->
 
 add these 5 lines to your linker script file:
 ```ld
@@ -280,4 +293,4 @@ add these 5 lines to your linker script file:
  } >FLASH
 ```
 
-### 6. build, flash and try it.
+### 6. build, flash and try it. <!-- omit in toc -->
