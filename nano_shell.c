@@ -14,46 +14,9 @@
 #include "shell_io/shell_io.h"
 #include "command/command.h"
 #include "readline/readline.h"
+#include "parse/text_parse.h"
 
 #include "shell_config.h"
-
-#define isblank(c) ((c) == ' ' || (c) == '\t')
-
-int nano_shell_parse_line(char *input, char *argv[], const int maxArgc)
-{
-  char current;
-  int nargc = 0;
-
-  while (nargc < maxArgc) {
-    while (isblank(*input)) {
-      input++;
-    }
-    if (*input == '\0') {  // end of input
-      argv[nargc] = NULL;
-      break;
-    }
-
-    current = *input;
-    // single quotes ('') and double quotes ("")
-    if (current == '\'' || current == '"') {
-      argv[nargc] = ++input;
-      while (*input != current) {
-        input++;
-      }
-    } else {  // normal character
-      argv[nargc] = input++;
-      while (*input && !isblank(*input)) {
-        input++;
-      }
-    }
-    nargc++;
-    if (*input != '\0') {
-      *input++ = '\0'; /* terminate current arg */
-    }
-  }
-
-  return nargc;
-}
 
 
 #if (CONFIG_SHELL_MAX_ARGC < 1)
