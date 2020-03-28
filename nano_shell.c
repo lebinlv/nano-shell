@@ -52,19 +52,18 @@ void nano_shell_loop(void *argument)
   for (;;) {
     line = readline(CONFIG_SHELL_PROMPT);
 
-    if (*line) {
-      argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_MAX_ARGC + 1);
+    argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_MAX_ARGC + 1);
 
-      // shell_printf("[DEBUG] argc: %d\r\n", argc);
-      // for (int i = 0; i < argc; i++) {
-      //   shell_printf("[DEBUG] ARGV[%d]: %s\r\n", i, argv[i]);
-      // }
+    // shell_printf("[DEBUG] argc: %d\r\n", argc);
+    // for (int i = 0; i < argc; i++) {
+    //   shell_printf("[DEBUG] ARGV[%d]: %s\r\n", i, argv[i]);
+    // }
 
-      if (argc > CONFIG_SHELL_MAX_ARGC) {
-        argc--;
-        shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_MAX_ARGC);
-        shell_printf("arguments after \"%s\" will be ignored. **\r\n", argv[argc - 1]);
-      }
+    if (argc > CONFIG_SHELL_MAX_ARGC) {
+      argc--;
+      shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_MAX_ARGC);
+      shell_printf("arguments after \"%s\" will be ignored. **\r\n", argv[argc - 1]);
+    }
 
     if (argc > 0) {
       nano_shell_run_cmd(argc, argv);
