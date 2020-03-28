@@ -1,15 +1,24 @@
 # Nano-Shell
 
-> Not yet completed...
-
 Nano-Shell is a light but powerful shell designed for embedded systems.
 
+![welcome](/doc/pic/nano_shell_welcome.png)
+
 - with or without embedded operating system;
-- main loop mode or interrupt mode;
-- flash friendly: less than 2.5KB(build with arm-none-eabi-gcc 7.3.1 20180622, -O3);
-- memory friendly: no malloc and free;
+- main loop mode or react mode;
 - highly configurable;
-- command line editing, history record, auto complete, hot key bind, etc...
+- command line editing, history record, hot key bind, etc...
+- memory friendly: **NO** malloc and free;
+- light (build with arm-none-eabi-gcc 7.3.1 20180622, -O3):
+  |                                        | text<sup>(1)</sup>  | .rodata | .bss<sup>(2)</sup> | .data |
+  |:--------------------------------------:|:------:|:-------:|:-----:|:-----:|
+  | main loop mode<br/>all configurations on  | 2.5KB  | 1.03KB  | 852B  | 8B    |
+  | main loop mode<br/>all configurations off | 616B   | 600B    | 180B  | 0B    |
+  | react mode<br/>all configurations on      | 2.52KB | 1.03KB  | 852B  | 8B    |
+  | react mode<br/>all configurations off     | 608KB  | 600B    | 180B  | 0B    |
+
+  > 1 include build in `help` command.<br/>
+  > 2 include `input buffer(default 128B)` and `hisroty record buffer(defaut 5*(128+2)B`)
 
 
 ## 简介
@@ -18,12 +27,12 @@ TODO:
 ## 功能
 TODO:
 
-## 配置说明
+## Configurations:
 TODO:
 
-## 移植
+## Getting Start
 
-### 1. first implement these functions([`@file shell_io.h`](/shell_io/shell_io.h)) in your project:
+##### 1. first implement these functions([`@file shell_io.h`](/shell_io/shell_io.h)) in your project:
 > this file may help: [`/shell_io/shell_io.c`](/shell_io/shell_io.c).
 ```c
 /**
@@ -74,9 +83,9 @@ extern int shell_printf(const char *format, ...) __attribute__((format(printf, 1
 extern int shell_getc(char *ch);
 ```
 
-### 2. then modify the configuration file: [`shell_config.h`](/shell_config.h)
+#### 2. then modify the configuration file: [`shell_config.h`](/shell_config.h)
 
-### 3. three modes:
+#### 3. three modes:
 
 - without os, main loop mode:
   ```c
@@ -123,6 +132,6 @@ extern int shell_getc(char *ch);
     vTaskStartScheduler();
   }
   ```
-  > When allocating the stack size for nano-shell, you should consider the memory occupied by commands added in nano-shell.
+  > When determining the stack size for nano-shell, you should consider the memory occupied by commands added in nano-shell.
 
-### 4. build, flash and try it.
+#### 4. build, flash and try it.
