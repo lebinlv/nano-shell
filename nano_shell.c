@@ -40,13 +40,13 @@ int nano_shell_run_cmd(int argc, char *const argv[])
 }
 
 
-#if (CONFIG_SHELL_MAX_ARGC < 1)
-#error "CONFIG_SHELL_MAX_ARGC must be no less than 1."
+#if (CONFIG_SHELL_CMD_MAX_ARGC < 1)
+#error "CONFIG_SHELL_CMD_MAX_ARGC must be no less than 1."
 #endif
 
 void nano_shell_loop(void *argument)
 {
-  static char *argv[CONFIG_SHELL_MAX_ARGC + 1];
+  static char *argv[CONFIG_SHELL_CMD_MAX_ARGC + 1];
   char *line;
   int argc;
 
@@ -67,16 +67,16 @@ void nano_shell_loop(void *argument)
   for (;;) {
     line = readline(CONFIG_SHELL_PROMPT);
 
-    argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_MAX_ARGC + 1);
+    argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_CMD_MAX_ARGC + 1);
 
     // shell_printf("[DEBUG] argc: %d\r\n", argc);
     // for (int i = 0; i < argc; i++) {
     //   shell_printf("[DEBUG] ARGV[%d]: %s\r\n", i, argv[i]);
     // }
 
-    if (argc > CONFIG_SHELL_MAX_ARGC) {
+    if (argc > CONFIG_SHELL_CMD_MAX_ARGC) {
       argc--;
-      shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_MAX_ARGC);
+      shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_CMD_MAX_ARGC);
       shell_printf("arguments after \"%s\" will be ignored. **\r\n", argv[argc - 1]);
     }
 
@@ -89,7 +89,7 @@ void nano_shell_loop(void *argument)
 
 void nano_shell_react(char ch)
 {
-  static char *argv[CONFIG_SHELL_MAX_ARGC + 1];
+  static char *argv[CONFIG_SHELL_CMD_MAX_ARGC + 1];
   int argc;
 
   char *line = readline_react(ch);
@@ -100,11 +100,11 @@ void nano_shell_react(char ch)
      * to improve speed.
      */
     if (*line) {
-      argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_MAX_ARGC + 1);
+      argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_CMD_MAX_ARGC + 1);
 
-      if (argc > CONFIG_SHELL_MAX_ARGC) {
+      if (argc > CONFIG_SHELL_CMD_MAX_ARGC) {
         argc--;
-        shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_MAX_ARGC);
+        shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_CMD_MAX_ARGC);
         shell_printf("arguments after \"%s\" will be ignored. **\r\n", argv[argc - 1]);
       }
 

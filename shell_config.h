@@ -48,6 +48,9 @@
 /* nano-shell provides a built-in help command, set 0 to disable it */
 #define CONFIG_SHELL_CMD_BUILTIN_HELP 1
 
+/* config the max number of arguments, must be no less than 1. */
+#define CONFIG_SHELL_CMD_MAX_ARGC (10U)
+
 
 /******************************* shell io configuration ****************************/
 
@@ -57,6 +60,5 @@
 
 /*******************************  shell configuration  ****************************/
 #define CONFIG_SHELL_PROMPT "STM32H7 >> "
-#define CONFIG_SHELL_MAX_ARGC 10
 
 #endif /* __NANO_SHELL_CONFIG_H */
