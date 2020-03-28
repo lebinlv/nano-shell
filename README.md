@@ -1,19 +1,17 @@
-# Nano-Shell
+# Nano-Shell <!-- omit in toc -->
 
 <img src="doc/pic/nano_shell_welcome.png" width=460>
 
-## Contents
-- [Nano-Shell](#nano-shell)
-  - [Contents](#contents)
-  - [Hot Key Bind](#hot-key-bind)
-  - [Add Command](#add-command)
-    - [Simple example:](#simple-example)
-  - [Configuring](#configuring)
-    - [readline configurations:](#readline-configurations)
-    - [command configurations:](#command-configurations)
-    - [shell configurations:](#shell-configurations)
-    - [shell io configurations:](#shell-io-configurations)
-  - [Porting nano-shell to your project](#porting-nano-shell-to-your-project)
+## Contents <!-- omit in toc -->
+- [Hot Key Bind](#hot-key-bind)
+- [Add Your Command](#add-your-command)
+  - [Simple example:](#simple-example)
+- [Configuring](#configuring)
+  - [readline configurations:](#readline-configurations)
+  - [command configurations:](#command-configurations)
+  - [shell configurations:](#shell-configurations)
+  - [shell io configurations:](#shell-io-configurations)
+- [Porting nano-shell to your project](#porting-nano-shell-to-your-project)
 
 ---
 
@@ -64,7 +62,7 @@ nano-shell has internally bound these hotkeys:
 
 ---
 
-## Add Command
+## Add Your Command
 
 Commands are added to nano-shell by creating a new command structure.
 
@@ -132,7 +130,7 @@ Run `help` and `help demo` in terminal:
 - CONFIG_SHELL_HIST_MIN_RECORD
   - default value: `(5U)`
   - set this to `0` will disable history record.
-  - nano-shell will take `CONFIG_SHELL_HIST_MIN_RECORD*(2+CONFIG_SHELL_INPUT_BUFFSIZE)` bytes to record **at least** `CONFIG_SHELL_HIST_MIN_RECORD` histroys. The max history records depends on the average length of the input.
+  - nano-shell will take `CONFIG_SHELL_HIST_MIN_RECORD*(2+CONFIG_SHELL_INPUT_BUFFSIZE)` bytes to record **At Least** `CONFIG_SHELL_HIST_MIN_RECORD` histroys. The max history records depends on the average length of the input.
 
 ### command configurations:
 
