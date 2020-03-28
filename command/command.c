@@ -37,12 +37,14 @@ const shell_cmd_t *shell_find_cmd(const char *cmd_name)
 
 int shell_run_cmd(int argc, char *const argv[])
 {
-  const shell_cmd_t *pCmdt = shell_find_cmd(argv[0]);
+  if (argc > 0) {
+    const shell_cmd_t *pCmdt = shell_find_cmd(argv[0]);
 
-  if (pCmdt) {
-    return pCmdt->cmd(pCmdt, argc, argv);
+    if (pCmdt) {
+      return pCmdt->cmd(pCmdt, argc, argv);
+    }
+
+    shell_printf("  %s: command not found.\r\n", argv[0]);
   }
-
-  shell_printf("  %s: command not found.\r\n", argv[0]);
   return -1;
 }
