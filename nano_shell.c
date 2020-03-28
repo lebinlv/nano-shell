@@ -18,6 +18,7 @@
 
 #include "shell_config.h"
 
+#define NANO_SHELL_BUILD_VERDION "1.0"
 
 /**
  * @brief
@@ -48,6 +49,20 @@ void nano_shell_loop(void *argument)
   static char *argv[CONFIG_SHELL_MAX_ARGC + 1];
   char *line;
   int argc;
+
+  shell_puts("\r\n"
+             " _   _                     ____  _          _ _\r\n"
+             "| \\ | | __ _ _ __   ___   / ___|| |__   ___| | |\r\n"
+             "|  \\| |/ _` | '_ \\ / _ \\  \\___ \\| '_ \\ / _ \\ | |\r\n"
+             "| |\\  | (_| | | | | (_) |  ___) | | | |  __/ | |\r\n"
+             "|_| \\_|\\__,_|_| |_|\\___/  |____/|_| |_|\\___|_|_|\r\n"
+             "\r\n"
+             "Welcome to Nano-Shell "NANO_SHELL_BUILD_VERDION"\r\n"
+             "\r\n"
+             " * Build:     "__DATE__" - "__TIME__"\r\n"
+             " * Source:    https://github.com/lebinlv/nano-shell\r\n"
+             " * Copyright: (c) Liber 2020\r\n"
+             "\r\n");
 
   for (;;) {
     line = readline(CONFIG_SHELL_PROMPT);
