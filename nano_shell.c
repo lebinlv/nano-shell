@@ -19,6 +19,26 @@
 #include "shell_config.h"
 
 
+/**
+ * @brief
+ *
+ * @param argc: MUST be larger than 0
+ * @param argv:
+ * @return int
+ */
+int nano_shell_run_cmd(int argc, char *const argv[])
+{
+  const shell_cmd_t *pCmdt = shell_find_cmd(argv[0]);
+
+  if (pCmdt) {
+    return pCmdt->cmd(pCmdt, argc, argv);
+  }
+  shell_printf("  %s: command not found.\r\n", argv[0]);
+
+  return -1;
+}
+
+
 #if (CONFIG_SHELL_MAX_ARGC < 1)
 #error "CONFIG_SHELL_MAX_ARGC must be no less than 1."
 #endif
@@ -45,7 +65,9 @@ void nano_shell_loop(void *argument)
         shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_MAX_ARGC);
         shell_printf("arguments after \"%s\" will be ignored. **\r\n", argv[argc - 1]);
       }
-      shell_run_cmd(argc, argv);
+
+    if (argc > 0) {
+      nano_shell_run_cmd(argc, argv);
     }
   }
 }
@@ -67,7 +89,10 @@ void nano_shell_react_to_input(char ch)
         shell_printf("** WARNING: too many args (max: %d)! ", CONFIG_SHELL_MAX_ARGC);
         shell_printf("arguments after \"%s\" will be ignored. **\r\n", argv[argc - 1]);
       }
-      shell_run_cmd(argc, argv);
+
+      if (argc > 0) {
+        nano_shell_run_cmd(argc, argv);
+      }
     }
 
     shell_puts(CONFIG_SHELL_PROMPT);
