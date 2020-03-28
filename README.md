@@ -2,7 +2,9 @@
 
 <img src="doc/pic/nano_shell_welcome.png" width=460>
 
+## Contents
 - [Nano-Shell](#nano-shell)
+  - [Contents](#contents)
   - [Hot Key Bind](#hot-key-bind)
   - [Add Command](#add-command)
     - [Simple example:](#simple-example)
@@ -13,6 +15,7 @@
     - [shell io configurations:](#shell-io-configurations)
   - [Porting nano-shell to your project](#porting-nano-shell-to-your-project)
 
+---
 
 Nano-Shell is a light but powerful shell designed for embedded systems.
 
@@ -33,6 +36,7 @@ Nano-Shell is a light but powerful shell designed for embedded systems.
   > 2: include `input buffer`(default 128Bytes) and `hisroty record buffer`(defaut 5*(128+2)Bytes) <br/>
   > 3: except `CONFIG_SHELL_CMD_BUILTIN_HELP`.
 
+---
 
 ## Hot Key Bind
 
@@ -57,6 +61,8 @@ nano-shell has internally bound these hotkeys:
 | Left Arrow  | Esc[D  | Left arrow(<--)<br/>Move cursor left one char.  |
 | Right Arrow | Esc[C  | Right arrow(-->)<br/>Move cursor right one char.|
 | Delete      | Esc[3~ | Delete the character under the cursor.|
+
+---
 
 ## Add Command
 
@@ -99,6 +105,7 @@ Run `help` and `help demo` in terminal:
 
 <img src="doc/pic/help_demo.png" width=750>
 
+---
 
 ## Configuring
 
@@ -158,6 +165,7 @@ Run `help` and `help demo` in terminal:
   - default: `(128U)`
   - config the buffer size of shell_printf().
 
+---
 
 ## Porting nano-shell to your project
 
