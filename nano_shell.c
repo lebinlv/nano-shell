@@ -81,6 +81,10 @@ void nano_shell_react_to_input(char ch)
   char *line = readline_react(ch);
 
   if (line) {
+    /**
+     * in react mode, use if (* line) to avoid unnecessary process
+     * to improve speed.
+     */
     if (*line) {
       argc = nano_shell_parse_line(line, argv, CONFIG_SHELL_MAX_ARGC + 1);
 
