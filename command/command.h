@@ -26,6 +26,7 @@ typedef struct _shell_cmd_s {
    * @param pCmdt: pointer of the structure.
    * @param argc: the count of arguments.
    * @param argv: argument vector.
+   * @return 0 if succeed, else non-zero. (return value is not used in ver1.0)
    *
    * @note the command name is the first argument, argv[0], so argc is always at least 1.
    */
