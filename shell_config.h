@@ -59,6 +59,6 @@
 
 
 /*******************************  shell configuration  ****************************/
-#define CONFIG_SHELL_PROMPT "STM32H7 >> "
+#define CONFIG_SHELL_PROMPT "Nano-Shell >> "
 
 #endif /* __NANO_SHELL_CONFIG_H */
