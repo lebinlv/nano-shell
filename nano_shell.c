@@ -72,7 +72,7 @@ void nano_shell_loop(void *argument)
 }
 
 
-void nano_shell_react_to_input(char ch)
+void nano_shell_react(char ch)
 {
   static char *argv[CONFIG_SHELL_MAX_ARGC + 1];
   int argc;

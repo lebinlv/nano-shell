@@ -23,12 +23,12 @@ void nano_shell_loop(void *argument);
 
 /**
  * @brief nano-shell non-block interface, just react to the input character.
- * It is non-block (unless there is an infinite loop in your command function)
+ * It is non-blocked (unless there is an infinite loop in your command function)
  * you can call it when get a new character.
  *
  * @param ch input character
  */
-void nano_shell_react_to_input(char ch);
+void nano_shell_react(char ch);
 
 
 #endif /*__NANO_SHELL_H */

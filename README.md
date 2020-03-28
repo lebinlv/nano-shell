@@ -91,7 +91,8 @@ extern int shell_getc(char *ch);
   }
   ```
 
-- without os, interrupt mode:
+- without os, react mode(non-block):
+  for example:
   ```c
   void your_interrupt_handler (void) // such as uart receive interrupt handler
   {
@@ -99,10 +100,11 @@ extern int shell_getc(char *ch);
     char ch = uart_get_char();
 
     /* nano-shell isr interface */
-    nano_shell_run_in_isr(ch);
+    nano_shell_react(ch);
   }
   ```
-  > recommended turn off some configurations in `shell_config.h` in this mode.
+  > nano_shell_react() is non-blocked (unless there is an infinite loop in your command function), you can call it when get a new character.
+  > recommended disable some configurations in `shell_config.h` if it was called in interrupt.
 
 - with os, take freertos for example:
   ```c
