@@ -1,11 +1,12 @@
 # Nano-Shell <!-- omit in toc -->
 
-<img src="doc/pic/nano_shell_welcome.png" width=460>
+<img src="doc/pic/nano_shell_welcome.png" width=600>
 
 ## Contents <!-- omit in toc -->
 - [Hot Key Bind](#hot-key-bind)
 - [Add Your Command](#add-your-command)
-  - [Simple example:](#simple-example)
+  - [HOW:](#how)
+  - [Example:](#example)
 - [Configuring](#configuring)
   - [readline configurations:](#readline-configurations)
   - [command configurations:](#command-configurations)
@@ -28,10 +29,12 @@ Nano-Shell is a light but powerful shell designed for embedded systems.
   | main loop mode,<br/>all configurations on  | 2.5KB  | 1.03KB  | 852B  | 8B    |
   | main loop mode,<br/>all configurations off<sup>(3)</sup> | 616B   | 600B    | 180B  | 0B    |
   | react mode,<br/>all configurations on      | 2.52KB | 1.03KB  | 852B  | 8B    |
-  | react mode,<br/>all configurations off<sup>(3)</sup>     | 608KB  | 600B    | 180B  | 0B    |
+  | react mode,<br/>all configurations off<sup>(3)</sup>     | 608B  | 600B    | 180B  | 0B    |
 
-  > 1: include build in `help` command.<br/>
-  > 2: include `input buffer`(default 128Bytes) and `hisroty record buffer`(defaut 5*(128+2)Bytes) <br/>
+  > 1: include built-in `help` command.
+  >
+  > 2: include `input buffer`(default 128Bytes) and `hisroty record buffer`(defaut 650Bytes(5*(128+2)))
+  >
   > 3: except `CONFIG_SHELL_CMD_BUILTIN_HELP`.
 
 ---
@@ -42,16 +45,16 @@ nano-shell has internally bound these hotkeys:
 
 | HOT KEY | ASCII/ANSI-Escape Code<br/>(Xterm, VT100) | Function |
 |---------|------------------------|----------|
-| Ctrl A | 1 | Home<br/>Move curosr to the start of line.|
-| Ctrl E | 5 | End<br/>Move curosr to the end of line.|
-| Ctrl P | 16 | Up arrow(-->)<br/>Move cursor right one char.|
-| Ctrl N | 14 | Down arrow(-->)<br/>Move cursor right one char.|
-| Ctrl B | 2 | Left arrow(<--)<br/>Move cursor left one char.|
-| Ctrl F | 6 | Right arrow(-->)<br/>Move cursor right one char.|
-| Ctrl D | 4 | Delete<br/>Delete the character under the cursor.|
-| Ctrl K | 11 | Erase forward<br/>Clears all characters from the cursor position to the end of the line.|
-| Ctrl U | 21 | Erase backword<br/>Clears all characters from the cursor position to the start of the line..|
-| Ctrl C | 3  | Kill the line.|
+| Ctrl-A | 1 | Home<br/>Move curosr to the start of line.|
+| Ctrl-E | 5 | End<br/>Move curosr to the end of line.|
+| Ctrl-P | 16 | Up arrow(-->)<br/>Move cursor right one char.|
+| Ctrl-N | 14 | Down arrow(-->)<br/>Move cursor right one char.|
+| Ctrl-B | 2 | Left arrow(<--)<br/>Move cursor left one char.|
+| Ctrl-F | 6 | Right arrow(-->)<br/>Move cursor right one char.|
+| Ctrl-D | 4 | Delete<br/>Delete the character under the cursor.|
+| Ctrl-K | 11 | Erase forward<br/>Clears all characters from the cursor position to the end of the line.|
+| Ctrl-U | 21 | Erase backword<br/>Clears all characters from the cursor position to the start of the line..|
+| Ctrl-C | 3  | Kill the line.|
 | Home        | Esc[H  | Move curosr to the beginning of line.|
 | End         | Esc[F  | Move curosr to the end of line.|
 | Up Arrow    | Esc[A  | Get the previous history. |
@@ -63,6 +66,8 @@ nano-shell has internally bound these hotkeys:
 ---
 
 ## Add Your Command
+
+### HOW:
 
 Commands are added to nano-shell by creating a new command structure.
 
@@ -80,7 +85,7 @@ NANO_SHELL_ADD_CMD(_name, _func, _brief, _help)
 `_help`: detailed help information of the command. This is a string.
 
 
-### Simple example:
+### Example:
 ```c
 int _do_demo(const shell_cmd_t *pcmd, int argc, char *const argv[])
 {
@@ -95,13 +100,14 @@ NANO_SHELL_ADD_CMD(demo,
                    "a command demo",
                    "  It's detailed help information of demo command\r\n");
 ```
+
 Run `demo` in terminal:
 
-<img src="doc/pic/command_demo.png" width=750>
+<img src="doc/pic/command_demo.png" width=600>
 
 Run `help` and `help demo` in terminal:
 
-<img src="doc/pic/help_demo.png" width=750>
+<img src="doc/pic/help_demo.png" width=600>
 
 ---
 
@@ -112,38 +118,39 @@ Run `help` and `help demo` in terminal:
 ### readline configurations:
 
 - CONFIG_SHELL_INPUT_BUFFSIZE (127U)
-  - default value: `(127U)`
-  - command line input buffer size (in byte).
+  - default: `(127U)`
+  - config the command line input buffer size (in byte).
 
 - CONFIG_SHELL_LINE_EDITING
-  - default: 1(enabled)
+  - default: `1(enabled)`
   - set this to `0` will disable command line editing.
 
 - CONFIG_SHELL_KEY_SEQ_BIND
-  - default: 1(enabled)
+  - default: `1(enabled)`
   - set this to `0` will disable ANSI-Escape-Sequence. nano-shell will not be able to detect Home/End/Delete/Arrow keys. Doesn't affect Ctrl-P, Ctrl-N, etc...
 
 - CONFIG_SHELL_MULTI_LINE
-  - default: 1(enabled)
+  - default: `1(enabled)`
   - use Backslash('\\') for line continuation when enabled, set this to `0` will disable line continuation.
+  - line continuation example:<br/><img src="doc/pic/line_continuation.png" width=600> <br/>
 
 - CONFIG_SHELL_HIST_MIN_RECORD
-  - default value: `(5U)`
+  - default: `(5U)`
   - set this to `0` will disable history record.
   - nano-shell will take `CONFIG_SHELL_HIST_MIN_RECORD*(2+CONFIG_SHELL_INPUT_BUFFSIZE)` bytes to record **At Least** `CONFIG_SHELL_HIST_MIN_RECORD` histroys. The max history records depends on the average length of the input.
 
 ### command configurations:
 
 - CONFIG_SHELL_CMD_BRIEF_USAGE
-  - default: 1(enabled)
+  - default: `1(enabled)`
   - command structure `shell_cmd_t` has a pointer point to "brief usage information of the command", set this to `0` will remove it.
 
 - CONFIG_SHELL_CMD_LONG_HELP
-  - default: 1(enabled)
+  - default: `1(enabled)`
   - command structure `shell_cmd_t` has a pointer point to "detailed help information of the command", set this to `0` will remove it.
 
 - CONFIG_SHELL_CMD_BUILTIN_HELP
-  - default: 1(enabled)
+  - default: `1(enabled)`
   - nano-shell provides a built-in `help` command, set this to `0` will remove the deault `help` command.
 
 - CONFIG_SHELL_CMD_MAX_ARGC
@@ -159,9 +166,9 @@ Run `help` and `help demo` in terminal:
 
 ### shell io configurations:
 
-- CONFIG_SHELL_PRINTF_BUFFER_SIZE 128U
+- CONFIG_SHELL_PRINTF_BUFFER_SIZE
   - default: `(128U)`
-  - config the buffer size of shell_printf().
+  - config the buffer size of `shell_printf()`.
 
 ---
 
@@ -232,58 +239,63 @@ Note:
     return 1;          // return true
   }
   ```
+  I write a simple and lock free fifo based on ring buffer in [`@file: /shell_io/static_fifo.h`](/shell_io/static_fifo.h), maybe helpful...
 
 ### 3. then modify the configuration file: [`shell_config.h`](/shell_config.h) <!-- omit in toc -->
 
 ### 4. according to your system, you can: <!-- omit in toc -->
 
 #### 4.1 without os, main loop mode: <!-- omit in toc -->
-  ```c
-  #include "nano_shell.h"
 
-  int main(void)
-  {
-    /* system init code... */
+```c
+#include "nano_shell.h"
 
-    /* nano-shell infinite loop. */
-    nano_shell_loop(NULL);
-  }
-  ```
+int main(void)
+{
+  /* system init code... */
+
+  /* nano-shell infinite loop. */
+  nano_shell_loop(NULL);
+}
+```
 
 #### 4.2 without os, react mode(non-block): <!-- omit in toc -->
-  for example:
-  ```c
-  void your_interrupt_handler (void) // such as uart receive interrupt handler
-  {
-    /* your uart receive code */
-    char ch = uart_get_char();
 
-    /* nano-shell isr interface */
-    nano_shell_react(ch);
-  }
-  ```
+you can use it in interrupt, take UART for example:
+
+```c
+void your_uart_interrupt_handler (void)
+{
+  /* your uart receive code */
+  char ch = uart_get_char();
+
+  /* nano-shell isr interface */
+  nano_shell_react(ch);
+}
+```
 
 Note:
 - `nano_shell_react()` is non-blocked (unless there was an infinite loop in your command function), you can call it when get a new character.
 - ~~It is recommended to disable some configurations in `shell_config.h` if it was called in interrupt.~~
 
 #### 4.3 with os, take freertos for example: <!-- omit in toc -->
-  ```c
-  #include "nano_shell.h"
 
-  int main(void)
-  {
-    /* system init code... */
+```c
+#include "nano_shell.h"
 
-    /* create nano_shell task */
-    TaskHandle_t shellTaskHandle = NULL;
-    xTaskCreate(nano_shell_loop, "shellTask", <stack_size>, NULL,
-                <task_priority>, &shellTaskHandle);
+int main(void)
+{
+  /* system init code... */
 
-    /* start rtos task scheduler */
-    vTaskStartScheduler();
-  }
-  ```
+  /* create nano_shell task */
+  TaskHandle_t shellTaskHandle = NULL;
+  xTaskCreate(nano_shell_loop, "shellTask", <stack_size>, NULL,
+              <task_priority>, &shellTaskHandle);
+
+  /* start rtos task scheduler */
+  vTaskStartScheduler();
+}
+```
 
 Note:
 - When determining the stack size for nano-shell, you should consider the memory occupied by commands added in nano-shell.
