@@ -1,6 +1,6 @@
 /**
  * @file nano_shell.c
- * @author Liber (lvlebin@outlook.com)
+ * @author Liber (lvlebin@outlook.com), Cédric CARRÉE (beg0@free.fr)
  * @brief nano-shell: a light but powerful shell designed for embedded systems.
  * @version 1.0
  * @date 2020-03-27
@@ -29,7 +29,7 @@
  */
 int nano_shell_run_cmd(int argc, char *const argv[])
 {
-  const shell_cmd_t *pCmdt = shell_find_cmd(argv[0]);
+  const shell_cmd_t *pCmdt = shell_find_top_cmd(argv[0]);
 
   if (pCmdt) {
     return pCmdt->cmd(pCmdt, argc, argv);
