@@ -78,14 +78,17 @@ NANO_SHELL_ADD_CMD(_name, _func, _brief, _help)
 ```
 `_name`: name of the command. Note: **THIS IS NOT** a string.
 
-`_func`: function pointer: (*cmd)(const shell_cmd_t *, int, int, char *const[]).
+`_func`: function pointer: `(*cmd)(const shell_cmd_t *, int, int, char *const[])`.
 
 `_brief`: brief summaries of the command. This is a string.
 
 `_help`: detailed help information of the command. This is a string.
 
+Commands with sub-commands can easily be created with a combination of `NANO_SHELL_DEFINE_SUBCMDS`,
+`NANO_SHELL_SUBCMD_ENTRY` and `NANO_SHELL_ADD_CMD`. See examples for more details.
 
-### Example:
+### Example 1: Simple command:
+
 ```c
 int _do_demo(const shell_cmd_t *pcmd, int argc, char *const argv[])
 {
@@ -108,6 +111,73 @@ Run `demo` in terminal:
 Run `help` and `help demo` in terminal:
 
 <img src="doc/pic/help_demo.png" width=600>
+
+### Example 2: Command with sub-commands:
+
+It is possible to create commands with sub-commands. More nested command can also be created.
+
+```c
+  /* Create a bunch of commands to be run as a demo */
+  int _top_command_fallback_fct(const shell_cmd_t* pCmdt, int argc, char* const argv[])
+  {
+    if(argc > 1) {
+    shell_printf("  '%s' is not a subcommand of %s\r\n", argv[1], argv[0]);
+     }
+     else {
+    shell_printf("  Hey, there is subcommands here, type '%s help' for more info\r\n", argv[0]);
+     }
+     return 0;
+  }
+  int _do_subcommand1(const shell_cmd_t* pCmdt, int argc, char* const argv[]) {
+      shell_puts("  This is sub-command 1\r\n");
+      return 0;
+  }
+
+  int _do_subsubcommand1(const shell_cmd_t* pCmdt, int argc, char* const argv[]) {
+      shell_puts("  This is sub-sub-command 1\r\n");
+      return 0;
+  }
+
+  int _do_subsubcommand2(const shell_cmd_t* pCmdt, int argc, char* const argv[]) {
+      shell_puts("  This is sub-sub-command 2\r\n");
+      return 0;
+  }
+
+  // Sub-Sub commands group
+  NANO_SHELL_DEFINE_SUBCMDS(subcommand2_group,
+        NULL,
+        NANO_SHELL_SUBCMD_ENTRY(subsubcommand1,
+          _do_subsubcommand1,
+          "first sub-sub-command",
+          ""),
+        NANO_SHELL_SUBCMD_ENTRY(subsubcommand2,
+          _do_subsubcommand2,
+          "second sub-sub-command",
+          ""));
+
+
+  // Sub commands group
+  NANO_SHELL_DEFINE_SUBCMDS(top_command_group,
+        _top_command_fallback_fct,
+        NANO_SHELL_SUBCMD_ENTRY(subcommand1,
+          _do_subcommand1,
+          "first subcommand",
+          ""),
+        NANO_SHELL_SUBCMD_ENTRY(subcommand2,
+          NANO_SHELL_SUBCMDS_FCT(subcommand2_group),
+          "second subcommand with sub-sub commands",
+          ""));
+
+  // Command with sub commands
+  NANO_SHELL_ADD_CMD(top_command,
+        NANO_SHELL_SUBCMDS_FCT(top_command_group),
+        "A command with subcommand",
+        "  This command have 2 sub-commands and one sub-sub-command\r\n");
+
+```
+
+In a terminal, you get:
+<img src="doc/pic/subcommand_demo.png" width=600>
 
 ---
 
